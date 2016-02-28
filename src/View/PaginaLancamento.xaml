@@ -1,0 +1,68 @@
+﻿<Page
+    x:Class="GerenciadorFinanceiroSimples.View.PaginaLancamento"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:GerenciadorFinanceiroSimples.View"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"     
+    xmlns:converters="using:GerenciadorFinanceiroSimples.Converters"
+    mc:Ignorable="d"
+    DataContext="{Binding Source={StaticResource Localizador}, Path=PaginaLancamento}">
+
+    <Page.Resources>
+        <converters:DateTimeParaDateTimeOffsetConverter x:Name="DateTimeParaDateTimeOffsetConverter" />
+        <converters:DoubleStringConverter x:Name="DoubleStringConverter" />
+        
+    </Page.Resources>
+
+    <Page.BottomAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Save" Content="salvar" Command="{Binding Salvar}" />
+            <AppBarButton Icon="Delete" Content="remover" Command="{Binding Remover}" />
+        </CommandBar>
+    </Page.BottomAppBar>
+    <Page.TopAppBar>
+        <CommandBar>
+            <AppBarButton Icon="Back" Label="voltar" Command="{Binding Voltar}"/>
+        </CommandBar>
+    </Page.TopAppBar>
+    
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Margin="15,15,15,75">
+            <StackPanel>
+                <ComboBox ItemsSource="{Binding Contas}" SelectedItem="{Binding ContaSelecionada, Mode=TwoWay}" Header="Conta" x:Name="ContaComboBox" HorizontalAlignment="Stretch" Margin="0,0,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding NomeConta}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ComboBox ItemsSource="{Binding Tipos}" SelectedItem="{Binding TipoSelecionado, Mode=TwoWay}" Header="Tipo" x:Name="TipoComboBox" HorizontalAlignment="Stretch" Margin="0,0,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nome}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <DatePicker Header="Data de vencimento" HorizontalAlignment="Stretch" x:Name="DataVencimentoDatePicker" Date="{Binding Detalhe.DataVencimento,Mode=TwoWay, Converter={StaticResource DateTimeParaDateTimeOffsetConverter}}" Margin="0,0,0,5" />
+                <TextBox Header="Valor" Text="{Binding Detalhe.Valor, Mode=TwoWay, Converter={StaticResource DoubleStringConverter}}" x:Name="ValorTextBox" Margin="0,0,0,5" />
+                <TextBox Header="Descrição" Text="{Binding Detalhe.Descricao,Mode=TwoWay}" x:Name="DescricaoTextBox" Margin="0,0,0,5" TextWrapping="Wrap" Height="143" />
+                <ComboBox Header="Categoria" ItemsSource="{Binding Categorias}" SelectedItem="{Binding CategoriaSelecionada, Mode=TwoWay}" x:Name="CategoriaComboBox" HorizontalAlignment="Stretch" Margin="0,0,0,5">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Nome}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+    <interactivity:Interaction.Behaviors>
+        <core:EventTriggerBehavior EventName="Loaded">
+            <core:InvokeCommandAction Command="{Binding PageLoad}" />
+        </core:EventTriggerBehavior>
+    </interactivity:Interaction.Behaviors>
+</Page>
